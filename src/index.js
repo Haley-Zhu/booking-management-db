@@ -1,10 +1,12 @@
 const express = require('express');
+require('express-async-errors');
 require('dotenv').config();
 const helmet = require('helmet');
 const morgan = require('morgan');
 const routes = require('./routes');
 const logger = require('./utils/logger');
 const connectToDB = require('./utils/database');
+const errorHandler = require('./middleware/errorHandler');
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -15,6 +17,7 @@ app.use(morganLog);
 app.use(express.json());
 
 app.use('/v1', routes);
+app.use(errorHandler);
 
 connectToDB()
   .then(() => {

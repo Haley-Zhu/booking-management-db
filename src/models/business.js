@@ -16,7 +16,7 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
       validate: {
-        validator: (email) => !joi.validate(email, joi.string().email()).error,
+        validator: (email) => !joi.string().email().validate(email).error,
         msg: "Invalid email format",
       },
     },
