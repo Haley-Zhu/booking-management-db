@@ -48,7 +48,7 @@ async function updateUser(req, res) {
     return res.status(404).json("user is not found");
   }
   if (name !== existingUser.name) {
-    return res.status(400).json("username cannot be changed");
+    return res.status(403).json("username cannot be changed");
   }
 
   const updatedUser = await User.findByIdAndUpdate(
