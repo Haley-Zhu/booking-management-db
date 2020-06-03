@@ -35,6 +35,7 @@ const schema = new mongoose.Schema(
     },
     state: {
       type: String,
+      uppercase: true,
       required: true,
       enum: ["NSW", "VIC", "QLD", "WA", "TAS", "SA", "ACT", "NT"],
     },

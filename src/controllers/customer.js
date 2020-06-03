@@ -1,14 +1,14 @@
 const Customer = require('../models/customer');
 
-function addCustomer(req, res){}
+async function addCustomer(req, res){}
 
-function getCustomerById(req, res){}
+async function getCustomerById(req, res){}
 
-function getAllCustomers(req, res){}
+async function getAllCustomers(req, res){}
 
-function updateCustomer(req, res){}
+async function updateCustomer(req, res){}
 
-function deleteCustomerById(req, res){}
+async function deleteCustomerById(req, res){}
 
 module.exports = {
   addCustomer,

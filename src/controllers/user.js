@@ -14,10 +14,6 @@ async function addUser(req, res) {
     password,
   });
   await user.save();
-  if (!user) {
-    return res.status(500).json("adding user failed");
-  }
-
   return res.json(user);
 }
 
