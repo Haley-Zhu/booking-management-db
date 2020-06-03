@@ -17,9 +17,6 @@ async function addOrder(req, res) {
     rate,
     comment,
   });
-  if (!order) {
-    return res.status(500).json("adding order failed");
-  }
   await order.save();
   return res.json(order);
 }
