@@ -14,6 +14,7 @@ async function addUser(req, res) {
     email,
     password,
   });
+  await user.hashPassword();
   await user.save();
   const token = generateToken(user._id);
   return res.json({ name, token });

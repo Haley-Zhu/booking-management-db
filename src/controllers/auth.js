@@ -8,7 +8,8 @@ async function loginUser(req, res) {
   if (!existingUser) {
     return res.status(401).json("Invalid username or password");
   }
-  if (existingUser.password !== password) {
+  const isValidPassword = await existingUser.validatePassword(password);
+  if (!isValidPassword) {
     return res.status(401).json("Invalid username or password");
   }
 
