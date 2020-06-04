@@ -1,6 +1,6 @@
 module.exports = {
   apps : [{
-    name: "app",
+    name: "booking-management",
     script: "./src/index.js"
   }]
 }
