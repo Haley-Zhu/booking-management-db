@@ -3,6 +3,7 @@ require('express-async-errors');
 require('dotenv').config();
 const helmet = require('helmet');
 const morgan = require('morgan');
+const cors = require('cors');
 const routes = require('./routes');
 const logger = require('./utils/logger');
 const connectToDB = require('./utils/database');
@@ -14,6 +15,7 @@ const morganLog = process.env.NODE_ENV === 'development' ? morgan('dev') : morga
 
 app.use(helmet());
 app.use(morganLog);
+app.use(cors());
 app.use(express.json());
 
 app.use('/v1', routes);
