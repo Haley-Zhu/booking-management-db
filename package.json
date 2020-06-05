@@ -29,9 +29,6 @@
     "type": "git",
     "url": "git+https://github.com/Haley-Zhu/booking-management-db.git"
   },
-  "engines": {
-    "node": "10.x"
-  },
   "author": "",
   "license": "ISC",
   "bugs": {
