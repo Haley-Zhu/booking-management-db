@@ -3,17 +3,17 @@ const joi = require("@hapi/joi");
 
 const schema = new mongoose.Schema(
   {
-    customerName: {
+    name: {
       type: String,
       required: true,
-    },
-    preferName: {
-      type: String,
-      default: "",
+      lowercase: true,
+      unique: true,
     },
     email: {
       type: String,
       required: true,
+      lowercase: true,
+      unique: true,
       validate: {
         validator: (email) => !joi.string().email().validate(email).error,
         msg: "Invalid email format",
@@ -22,10 +22,11 @@ const schema = new mongoose.Schema(
     phone: {
       type: Number,
       required: true,
+      unique: true,
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
