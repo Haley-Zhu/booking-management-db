@@ -1,0 +1,1 @@
+const DEFAULT_SEARCH_FIELD = 'searchAll'

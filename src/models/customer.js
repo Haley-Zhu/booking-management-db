@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const joi = require("@hapi/joi");
+const { DEFAULT_SEARCH_FIELD } = require("../utils/constants");
 
 const schema = new mongoose.Schema(
   {
@@ -20,7 +21,7 @@ const schema = new mongoose.Schema(
       },
     },
     phone: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
     },
@@ -30,13 +31,44 @@ const schema = new mongoose.Schema(
   }
 );
 
-schema.statics.searchByFilter = async function (searchValue) {
+schema.statics.searchByFilter = async function (searchValue, searchField) {
+  console.log(
+    "----------searchValue:",
+    searchValue,
+    "searchField",
+    searchField,
+    'typeof:', typeof(searchValue)
+  );
   let reg = new RegExp(searchValue, "i");
-  let params = {
-    name: { $regex: reg },
-  };
-  const data = await this.find(params).exec();
+  let data;
+  let params = {};
+  if (searchField === DEFAULT_SEARCH_FIELD) {
+    // data = await this.find().exec();
+  } else {
+    params = {
+      [searchField]: { $regex: reg },
+    };
+  }
+  data = await this.find(params).exec();
   return data;
+  // try {
+  //   let ret = await new Promise((resolve, reject) => {
+  //     this.find(params).exec(function (err, doc) {
+  //       if (err) {
+  //         reject(`fail to find set by author:${searchField}` + searchValue);
+  //       } else {
+  //         if (!doc.length) {
+  //           reject(`the result is empty search by author:${searchField}` + searchValue);
+  //         } else {
+  //           resolve(doc);
+  //         }
+  //       }
+  //     });
+  //   });
+  //   return ret;
+  // } catch (error) {
+  //   throw error;
+  // }
 };
 
 const model = mongoose.model("Customer", schema);

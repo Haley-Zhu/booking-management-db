@@ -21,9 +21,9 @@ async function getCustomerById(req, res) {
 }
 
 async function getAllCustomers(req, res) {
-  const { searchValue } = req.query;
-  console.log('searchValue', searchValue)
-  const customers = await Customer.searchByFilter(searchValue);
+  const { searchValue, searchField } = req.query;
+  console.log('searchValue:', searchValue, 'searchField:', searchField)
+  const customers = await Customer.searchByFilter(searchValue, searchField);
   if (!customers) {
     return res.status(404).json("customers are not found");
   }
