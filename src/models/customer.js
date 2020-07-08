@@ -30,6 +30,15 @@ const schema = new mongoose.Schema(
   }
 );
 
+schema.statics.searchByFilter = async function (searchValue) {
+  let reg = new RegExp(searchValue, "i");
+  let params = {
+    name: { $regex: reg },
+  };
+  const data = await this.find(params).exec();
+  return data;
+};
+
 const model = mongoose.model("Customer", schema);
 
 module.exports = model;
