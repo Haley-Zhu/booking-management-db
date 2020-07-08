@@ -2,7 +2,7 @@ const Business = require("../models/business");
 
 async function addBusiness(req, res) {
   const {
-    businessName,
+    name,
     ABN,
     email,
     phone,
@@ -16,7 +16,7 @@ async function addBusiness(req, res) {
     return res.status(400).json("email has already existed");
   }
   const business = new Business({
-    businessName,
+    name,
     ABN,
     email,
     phone,
@@ -50,7 +50,7 @@ async function getAllBusinesses(req, res) {
 async function updateBusiness(req, res) {
   const { id } = req.params;
   const {
-    businessName,
+    name,
     ABN,
     email,
     phone,
@@ -61,7 +61,7 @@ async function updateBusiness(req, res) {
   } = req.body;
   const updatedBusiness = await Business.findByIdAndUpdate(
     id,
-    { businessName, ABN, email, phone, streeAddress, postcode, state, rate },
+    { name, ABN, email, phone, streeAddress, postcode, state, rate },
     { runValidators: true, new: true }
   );
   if (!updatedBusiness) {
@@ -72,11 +72,11 @@ async function updateBusiness(req, res) {
 
 async function deleteBusinessById(req, res) {
   const { id } = req.params;
-  const deletedCustomer = await Customer.findByIdAndDelete(id);
-  if (!deletedCustomer) {
+  const deletedBusiness = await Business.findByIdAndDelete(id);
+  if (!deletedBusiness) {
     return res.status(404).json("business is not found");
   }
-  return res.json(deletedCustomer);
+  return res.json(deletedBusiness);
 }
 
 module.exports = {

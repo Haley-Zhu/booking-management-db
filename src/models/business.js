@@ -3,26 +3,30 @@ const joi = require("@hapi/joi");
 
 const schema = new mongoose.Schema(
   {
-    businessName: {
+    name: {
       type: String,
       required: true,
+      unique: true,
     },
     ABN: {
-      type: Number,
+      type: String,
       required: true,
       default: "",
+      unique: true,
     },
     email: {
       type: String,
       required: true,
+      unique: true,
       validate: {
         validator: (email) => !joi.string().email().validate(email).error,
         msg: "Invalid email format",
       },
     },
     phone: {
-      type: Number,
+      type: String,
       required: true,
+      unique: true,
     },
     streeAddress: {
       type: String,
@@ -30,7 +34,7 @@ const schema = new mongoose.Schema(
       default: "",
     },
     postcode: {
-      type: Number,
+      type: String,
       required: true,
     },
     state: {
