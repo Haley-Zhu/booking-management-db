@@ -2,6 +2,7 @@ const Customer = require("../models/customer");
 
 async function addCustomer(req, res) {
   const { name, email, phone } = req.body;
+  console.log('req.body: ', req.body);
   const customer = new Customer({
     name,
     email,

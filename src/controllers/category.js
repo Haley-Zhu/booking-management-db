@@ -1,11 +1,15 @@
 const Category = require("../models/category");
 
 async function addCategory(req, res) {
-  const { name, description } = req.body;
+  const { serviceName, description } = req.body;
+  console.log('req.body: ', req.body);
+  console.log('addCategory serviceName:', serviceName, 'description: ', description);
+
   const category = new Category({
-    name,
+    serviceName,
     description
   });
+  console.log('category: ', category);
   await category.save();
   return res.json(category);
 }
@@ -20,7 +24,10 @@ async function getCategoryById(req, res) {
 }
 
 async function getAllCategories(req, res) {
-  const categories = await Category.find();
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~getAllCategories start');
+  const { searchValue, searchField } = req.query;
+  console.log('searchValue:', searchValue, 'searchField:', searchField)
+  const categories = await Category.searchByFilter(searchValue, searchField);
   if (!categories) {
     return res.status(404).json("categories are not found");
   }
@@ -29,10 +36,10 @@ async function getAllCategories(req, res) {
 
 async function updateCategory(req, res) {
   const { id } = req.params;
-  const { name, description } = req.body;
+  const { serviceName, description } = req.body;
   const updatedCategory = await Category.findByIdAndUpdate(
     id,
-    { name, description },
+    { serviceName, description },
     { new: true }
   );
   if (!updatedCategory) {
