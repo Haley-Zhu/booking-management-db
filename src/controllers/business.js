@@ -40,7 +40,10 @@ async function getBusinessById(req, res) {
 }
 
 async function getAllBusinesses(req, res) {
-  const businesses = await Business.find();
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~getAllBusinesses start');
+  const { searchValue, searchField } = req.query;
+  console.log('searchValue:', searchValue, 'searchField:', searchField)
+  const businesses = await Business.searchByFilter(searchValue, searchField);
   if (!businesses) {
     return res.status(404).json("businesses are not found");
   }

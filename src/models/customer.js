@@ -42,7 +42,7 @@ schema.statics.searchByFilter = async function (searchValue, searchField) {
   let reg = new RegExp(searchValue, "i");
   let data;
   let params = {};
-  if (searchField === DEFAULT_SEARCH_FIELD) {
+  if (!searchField || searchField === DEFAULT_SEARCH_FIELD) {
     // data = await this.find().exec();
   } else {
     params = {
