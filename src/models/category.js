@@ -14,9 +14,21 @@ const schema = new mongoose.Schema(
       default: "",
       unique: true,
     },
+    businesses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Business",
+      },
+    ],
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
@@ -26,7 +38,8 @@ schema.statics.searchByFilter = async function (searchValue, searchField) {
     searchValue,
     "searchField",
     searchField,
-    'typeof:', typeof(searchValue)
+    "typeof:",
+    typeof searchValue
   );
   let reg = new RegExp(searchValue, "i");
   let data;
@@ -38,8 +51,15 @@ schema.statics.searchByFilter = async function (searchValue, searchField) {
       [searchField]: { $regex: reg },
     };
   }
-  console.log('searchField: ', searchField, 'DEFAULT_SEARCH_FIELD: ', DEFAULT_SEARCH_FIELD, 'equal: ?', searchField === DEFAULT_SEARCH_FIELD);
-  console.log('params: ', params);
+  console.log(
+    "searchField: ",
+    searchField,
+    "DEFAULT_SEARCH_FIELD: ",
+    DEFAULT_SEARCH_FIELD,
+    "equal: ?",
+    searchField === DEFAULT_SEARCH_FIELD
+  );
+  console.log("params: ", params);
   data = await this.find(params).exec();
   return data;
 };

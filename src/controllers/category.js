@@ -1,4 +1,5 @@
 const Category = require("../models/category");
+const Business = require("../models/business");
 
 async function addCategory(req, res) {
   const { serviceName, description } = req.body;
@@ -57,10 +58,41 @@ async function deleteCategoryById(req, res) {
   return res.json(deletedCategory);
 }
 
+async function addBusinesstoCategory(req, res) {
+  const { categoryId, businessId } = req.params;
+  const existingCategory = await Category.findById(categoryId);
+  const existingBusiness = await Business.findById(businessId);
+  if (!existingCategory || !existingBusiness) {
+      return res.status(404).json('Category or business is not found');
+  }
+
+  existingCategory.businesses.addToSet(existingBusiness._id);
+  await existingCategory.save();
+  existingBusiness.categories.addToSet(existingCategory._id);
+  await existingBusiness.save();
+  return res.json(existingCategory);
+}
+
+async function deleteBusinessFromCategory(req, res) {
+  const { categoryId, businessId } = req.params;
+  const existingCategory = await Category.findById(categoryId);
+  const existingBusiness = await Business.findById(businessId);
+  if (!existingCategory || !existingBusiness) {
+      return res.status(404).json('Category or business is not found');
+  }
+  existingCategory.businesses.pull(existingBusiness._id);
+  await existingCategory.save();
+  existingBusiness.categories.pull(existingCategory._id);
+  await existingBusiness.save();
+  return res.json(existingCategory);
+}
+
 module.exports = {
   addCategory,
   getCategoryById,
   getAllCategories,
   updateCategory,
   deleteCategoryById,
+  addBusinesstoCategory,
+  deleteBusinessFromCategory
 };
