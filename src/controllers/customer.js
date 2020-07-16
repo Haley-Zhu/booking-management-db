@@ -65,8 +65,6 @@ async function addOrdertoCustomer(req, res) {
 
   existingCustomer.orders.addToSet(existingOrder._id);
   await existingCustomer.save();
-  existingOrder.customer.addToSet(existingCustomer._id);
-  await existingOrder.save();
   return res.json(existingCustomer);
 }
 
@@ -79,8 +77,6 @@ async function deleteOrdertoCustomer(req, res) {
   }
   existingCustomer.orders.pull(existingOrder._id);
   await existingCustomer.save();
-  existingOrder.customer.pull(existingCustomer._id);
-  await existingOrder.save();
   return res.json(existingCustomer);
 }
 
@@ -90,4 +86,6 @@ module.exports = {
   getAllCustomers,
   updateCustomer,
   deleteCustomerById,
+  addOrdertoCustomer,
+  deleteOrdertoCustomer,
 };
