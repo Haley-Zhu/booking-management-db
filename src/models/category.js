@@ -20,12 +20,6 @@ const schema = new mongoose.Schema(
         ref: "Business",
       },
     ],
-    orders: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
   },
   {
     timestamps: true,

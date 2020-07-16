@@ -3,14 +3,19 @@ const Business = require("../models/business");
 
 async function addCategory(req, res) {
   const { serviceName, description } = req.body;
-  console.log('req.body: ', req.body);
-  console.log('addCategory serviceName:', serviceName, 'description: ', description);
+  console.log("req.body: ", req.body);
+  console.log(
+    "addCategory serviceName:",
+    serviceName,
+    "description: ",
+    description
+  );
 
   const category = new Category({
     serviceName,
-    description
+    description,
   });
-  console.log('category: ', category);
+  console.log("category: ", category);
   await category.save();
   return res.json(category);
 }
@@ -25,9 +30,9 @@ async function getCategoryById(req, res) {
 }
 
 async function getAllCategories(req, res) {
-  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~getAllCategories start');
+  console.log("~~~~~~~~~~~~~~~~~~~~~~~~~getAllCategories start");
   const { searchValue, searchField } = req.query;
-  console.log('searchValue:', searchValue, 'searchField:', searchField)
+  console.log("searchValue:", searchValue, "searchField:", searchField);
   const categories = await Category.searchByFilter(searchValue, searchField);
   if (!categories) {
     return res.status(404).json("categories are not found");
@@ -55,6 +60,10 @@ async function deleteCategoryById(req, res) {
   if (!deletedCategory) {
     return res.status(404).json("deleting category failed");
   }
+  await Business.updateMany(
+    { _id: { $in: deletedCategory.businesses } },
+    { $pull: { categories: deletedCategory._id } }
+  );
   return res.json(deletedCategory);
 }
 
@@ -63,7 +72,7 @@ async function addBusinesstoCategory(req, res) {
   const existingCategory = await Category.findById(categoryId);
   const existingBusiness = await Business.findById(businessId);
   if (!existingCategory || !existingBusiness) {
-      return res.status(404).json('Category or business is not found');
+    return res.status(404).json("Category or business is not found");
   }
 
   existingCategory.businesses.addToSet(existingBusiness._id);
@@ -78,7 +87,7 @@ async function deleteBusinessFromCategory(req, res) {
   const existingCategory = await Category.findById(categoryId);
   const existingBusiness = await Business.findById(businessId);
   if (!existingCategory || !existingBusiness) {
-      return res.status(404).json('Category or business is not found');
+    return res.status(404).json("Category or business is not found");
   }
   existingCategory.businesses.pull(existingBusiness._id);
   await existingCategory.save();
@@ -94,5 +103,5 @@ module.exports = {
   updateCategory,
   deleteCategoryById,
   addBusinesstoCategory,
-  deleteBusinessFromCategory
+  deleteBusinessFromCategory,
 };

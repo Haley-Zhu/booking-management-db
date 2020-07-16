@@ -53,12 +53,6 @@ const schema = new mongoose.Schema(
         ref: "Category",
       },
     ],
-    orders: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
   },
   {
     timestamps: true,

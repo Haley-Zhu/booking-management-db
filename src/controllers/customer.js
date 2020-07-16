@@ -1,4 +1,5 @@
 const Customer = require("../models/customer");
+const Order = require("../models/order");
 
 async function addCustomer(req, res) {
   const { name, email, phone } = req.body;
@@ -52,6 +53,35 @@ async function deleteCustomerById(req, res) {
     return res.status(404).json("deleting customer failed");
   }
   return res.json(deletedCustomer);
+}
+
+async function addOrdertoCustomer(req, res) {
+  const { customerId, orderId } = req.params;
+  const existingCustomer = await Customer.findById(customerId);
+  const existingOrder = await Order.findById(orderId);
+  if (!existingCustomer || !existingOrder) {
+    return res.status(404).json("Customer or Order is not found");
+  }
+
+  existingCustomer.orders.addToSet(existingOrder._id);
+  await existingCustomer.save();
+  existingOrder.customer.addToSet(existingCustomer._id);
+  await existingOrder.save();
+  return res.json(existingCustomer);
+}
+
+async function deleteOrdertoCustomer(req, res) {
+  const { customerId, orderId } = req.params;
+  const existingCustomer = await Customer.findById(customerId);
+  const existingOrder = await Order.findById(orderId);
+  if (!existingCustomer || !existingOrder) {
+    return res.status(404).json("Customer or Order is not found");
+  }
+  existingCustomer.orders.pull(existingOrder._id);
+  await existingCustomer.save();
+  existingOrder.customer.pull(existingCustomer._id);
+  await existingOrder.save();
+  return res.json(existingCustomer);
 }
 
 module.exports = {

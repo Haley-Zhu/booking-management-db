@@ -25,6 +25,12 @@ const schema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -37,7 +43,8 @@ schema.statics.searchByFilter = async function (searchValue, searchField) {
     searchValue,
     "searchField",
     searchField,
-    'typeof:', typeof(searchValue)
+    "typeof:",
+    typeof searchValue
   );
   let reg = new RegExp(searchValue, "i");
   let data;

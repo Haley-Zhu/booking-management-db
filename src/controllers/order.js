@@ -1,7 +1,13 @@
 const Order = require("../models/order");
+const Customer = require("../models/customer");
+const Business = require("../models/business");
+const Category = require("../models/category");
 
 async function addOrder(req, res) {
   const {
+    customer,
+    business,
+    category,
     status,
     orderEstimatedTime,
     orderFinishedTime,
@@ -10,6 +16,9 @@ async function addOrder(req, res) {
     comment,
   } = req.body;
   const order = new Order({
+    customer,
+    business,
+    category,
     status,
     orderEstimatedTime,
     orderFinishedTime,
@@ -17,6 +26,21 @@ async function addOrder(req, res) {
     rate,
     comment,
   });
+  const existingCustomer = await Customer.findOne({ name: customer });
+  if (!existingCustomer) {
+    return res.status(404).json(`Customer is not found`);
+  }
+
+  const existingCategory = await Category.findOne({ serviceName: category });
+  if (!existingCategory) {
+    return res.status(404).json(`Category is not found`);
+  }
+
+  const existingBusiness = await Business.findOne({ name: business });
+  if (!existingBusiness) {
+    return res.status(404).json(`Business is not found`);
+  }
+
   await order.save();
   return res.json(order);
 }
@@ -41,22 +65,28 @@ async function getAllOrders(req, res) {
 async function updateOrder(req, res) {
   const { id } = req.params;
   const {
+    customer,
+    business,
+    category,
     status,
     orderEstimatedTime,
     orderFinishedTime,
     orderLocation,
     rate,
-    comment
+    comment,
   } = req.body;
   const updatedOrder = await Order.findByIdAndUpdate(
     id,
     {
+      customer,
+      business,
+      category,
       status,
       orderEstimatedTime,
       orderFinishedTime,
       orderLocation,
       rate,
-      comment
+      comment,
     },
     { runValidators: true, new: true }
   );
@@ -72,6 +102,10 @@ async function deleteOrderById(req, res) {
   if (!deletedOrder) {
     return res.status(404).json("order is not found");
   }
+  await Customer.updateMany(
+    { _id: { $in: deletedOrder.customer } },
+    { $pull: { orders: deletedOrder._id } }
+  );
   return res.json(deletedOrder);
 }
 

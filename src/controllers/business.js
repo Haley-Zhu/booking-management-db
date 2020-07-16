@@ -80,6 +80,10 @@ async function deleteBusinessById(req, res) {
   if (!deletedBusiness) {
     return res.status(404).json("business is not found");
   }
+  await Category.updateMany(
+    { _id: { $in: deletedBusiness.categories } },
+    { $pull: { businesses: deletedBusiness._id } }
+  );
   return res.json(deletedBusiness);
 }
 
