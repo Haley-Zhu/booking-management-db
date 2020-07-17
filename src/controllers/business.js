@@ -32,7 +32,10 @@ async function addBusiness(req, res) {
 
 async function getBusinessById(req, res) {
   const { id } = req.params;
-  const business = await Business.findById(id);
+  const business = await Business.findById(id).populate(
+    "categories",
+    "_id serviceName"
+  );
 
   if (!business) {
     res.status(404).json("business is not found");
@@ -71,6 +74,7 @@ async function updateBusiness(req, res) {
   if (!updatedBusiness) {
     return res.status(404).json("business is not found");
   }
+  console.log("@@@@@@@@@@@", updatedBusiness);
   return res.json(updatedBusiness);
 }
 

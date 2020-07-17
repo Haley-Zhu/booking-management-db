@@ -50,7 +50,13 @@ schema.statics.searchByFilter = async function (searchValue, searchField) {
   let data;
   let params = {};
   if (!searchField || searchField === DEFAULT_SEARCH_FIELD) {
-    // data = await this.find().exec();
+    params = {
+      $or: [
+        { name: { $regex: reg } },
+        { email: { $regex: reg } },
+        { phone: { $regex: reg } },
+      ],
+    };
   } else {
     params = {
       [searchField]: { $regex: reg },

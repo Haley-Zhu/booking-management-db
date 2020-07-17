@@ -72,7 +72,14 @@ schema.statics.searchByFilter = async function (searchValue, searchField) {
   let data;
   let params = {};
   if (!searchField || searchField === DEFAULT_SEARCH_FIELD) {
-    // data = await this.find().exec();
+    params = {
+      $or: [
+        { name: { $regex: reg } },
+        { email: { $regex: reg } },
+        { phone: { $regex: reg } },
+        { postcode: { $regex: reg } },
+      ],
+    };
   } else {
     params = {
       [searchField]: { $regex: reg },
@@ -87,7 +94,7 @@ schema.statics.searchByFilter = async function (searchValue, searchField) {
     searchField === DEFAULT_SEARCH_FIELD
   );
   console.log("params: ", params);
-  data = await this.find(params).exec();
+  data = await this.find(params).populate("categories", "serviceName");
   return data;
 };
 
