@@ -32,14 +32,13 @@ async function addBusiness(req, res) {
 
 async function getBusinessById(req, res) {
   const { id } = req.params;
-  const business = await Business.findById(id).populate(
-    "categories",
-    "_id serviceName"
-  );
+  console.log("~~~~~~~~~~~~~~~~~~~~~~~~~getBusinessById start:", id);
+  const business = await Business.findById(id);
 
   if (!business) {
     res.status(404).json("business is not found");
   }
+  console.log("~~~~~~~~~~~~~~~~~~~~~~~~~getBusinessById end:", business);
   return res.json(business);
 }
 
@@ -122,6 +121,15 @@ async function deleteCategoryFromBusiness(req, res) {
   return res.json(existingBusiness);
 }
 
+async function getBusinessListByCategoryId(req, res) {
+  const { categoryId } = req.params;
+  const businessList = await Business.find({categories: { $in: categoryId}});
+  if (!businessList) {
+    return res.status(404).json("business is not found");
+  }
+  return res.json(businessList);  
+}
+
 module.exports = {
   addBusiness,
   getBusinessById,
@@ -130,4 +138,5 @@ module.exports = {
   deleteBusinessById,
   addCategorytoBusiness,
   deleteCategoryFromBusiness,
+  getBusinessListByCategoryId,
 };

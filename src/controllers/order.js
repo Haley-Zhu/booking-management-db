@@ -26,17 +26,17 @@ async function addOrder(req, res) {
     rate,
     comment,
   });
-  const existingCustomer = await Customer.findOne({ name: customer });
+  const existingCustomer = await Customer.findOne({ _id: customer });
   if (!existingCustomer) {
     return res.status(404).json(`Customer is not found`);
   }
 
-  const existingCategory = await Category.findOne({ serviceName: category });
+  const existingCategory = await Category.findOne({ _id: category });
   if (!existingCategory) {
     return res.status(404).json(`Category is not found`);
   }
 
-  const existingBusiness = await Business.findOne({ name: business });
+  const existingBusiness = await Business.findOne({ _id: business });
   if (!existingBusiness) {
     return res.status(404).json(`Business is not found`);
   }
@@ -55,7 +55,10 @@ async function getOrderById(req, res) {
 }
 
 async function getAllOrders(req, res) {
-  const orders = await Order.find();
+  const orders = await Order.find()
+    .populate("customer", "name")
+    .populate("business", "name")
+    .populate("category", "serviceName");
   if (!orders) {
     return res.status(404).json("orders are not found");
   }

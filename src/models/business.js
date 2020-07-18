@@ -46,6 +46,7 @@ const schema = new mongoose.Schema(
     },
     rate: {
       type: Number,
+      default: 0
     },
     categories: [
       {

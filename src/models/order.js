@@ -5,8 +5,8 @@ const schema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ["processing", "accepted", "finished"],
-      default: "processing",
+      enum: ['ongoing', 'finished', 'cancelled '],
+      default: "ongoing",
     },
     orderEstimatedTime: {
       type: Date,
@@ -20,7 +20,6 @@ const schema = new mongoose.Schema(
     },
     rate: {
       type: Number,
-      required: true,
       enum: [0, 1, 2, 3, 4, 5],
       default: 5,
       validate: (rate) => {
@@ -38,7 +37,6 @@ const schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customer",
       required: true,
-      lowercase: true,
     },
     business: {
       type: mongoose.Schema.Types.ObjectId,
