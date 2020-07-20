@@ -57,11 +57,11 @@ async function getOrderById(req, res) {
 async function getAllOrders(req, res) {
   const { searchValue, searchField } = req.query;
   console.log('searchValue:', searchValue, 'searchField:', searchField)
-  const orders = await Order.find()
-  .populate('customer', 'name')
-  .populate('business', 'name')
-  .populate('category', 'serviceName');
-  // const orders = await Order.searchByFilter(searchValue, searchField);
+  // const orders = await Order.find()
+  // .populate('customer', 'name')
+  // .populate('business', 'name')
+  // .populate('category', 'serviceName');
+  const orders = await Order.searchByFilter(searchValue, searchField);
   if (!orders) {
     return res.status(404).json("orders are not found");
   }

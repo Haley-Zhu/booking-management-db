@@ -52,9 +52,9 @@ schema.statics.searchByFilter = async function (searchValue, searchField) {
   if (!searchField || searchField === DEFAULT_SEARCH_FIELD) {
     params = {
       $or: [
-        { "name": { $regex: reg } },
-        { "email": { $regex: reg } },
-        { "phone": { $regex: reg } },
+        { name: { $regex: reg } },
+        { email: { $regex: reg } },
+        { phone: { $regex: reg } },
       ],
     };
     console.log('################# params:', params);
